@@ -1,7 +1,5 @@
 // weather.js
 
-console.log("hello World!");
-
 const locInput = document.querySelector("#location");
 const locButton = document.querySelector("#location_search");
 const gifImage = document.querySelector("img");
@@ -12,6 +10,7 @@ function populatePage () {
     let location = locInput.value;
     let weatherData;
     let wObj;
+
     if (location == '') {
         location = 'Nashville';
     };
@@ -21,20 +20,29 @@ function populatePage () {
         try {
             // store weather data as variable
             weatherData = await response.json();
+            console.log(weatherData);
             const rightNow = weatherData.currentConditions;
 
             wObj = {
-                time: rightNow.datetime,
-                temp: rightNow.temp,
-                feels: rightNow.feelslike,
-                cloud: rightNow.cloudcover,
-                env: rightNow.conditions,
-                rise: rightNow.sunrise,
-                set: rightNow.sunset,
+                // "Location": rightNow.
+                "Resolved Address": weatherData.resolvedAddress,
+                "Current Time": rightNow.datetime,
+                "Current Temperature": rightNow.temp,
+                "Feels Like": rightNow.feelslike,
+                "Weather Condition": rightNow.conditions,
+                "Cloud Cover": rightNow.cloudcover,
+                "Sunrise": rightNow.sunrise,
+                "Sunset": rightNow.sunset,
+            };
+
+            for (const [key, value] of Object.entries(wObj)) {
+                const addP = document.createElement('p');
+                addP.textContent = `${key}: ${value}`;
+                weatherContent.appendChild(addP);
             };
 
             // Once the weather is returned, we can get a gif based on the weather conditions.
-            let term = wObj.env;
+            let term = rightNow.conditions;
             if (term == '') {
                 term = 'sexy';
             };
@@ -57,10 +65,6 @@ function populatePage () {
     };
 
     getWeather();
-
-    
-
-
 };
 
 locButton.addEventListener('click', () => {
