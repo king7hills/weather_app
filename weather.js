@@ -18,6 +18,13 @@ function populatePage () {
     async function getWeather () {
         const response = await fetch(`https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${location}?key=2U6UFQEAFWM3KRVUQ5RQHBW8W&include=days,hours,alerts,current,stats`);
         try {
+            if (!response.ok) {
+                if (response.status == 400) {
+                    weatherContent.textContent = "Please double check your spelling!"
+                };
+                throw new Error(`Response status: ${response.status}`);
+                
+            }
             // store weather data as variable
             weatherData = await response.json();
             console.log(weatherData);
@@ -26,7 +33,7 @@ function populatePage () {
             wObj = {
                 // "Location": rightNow.
                 "Resolved Address": weatherData.resolvedAddress,
-                "Current Time": rightNow.datetime,
+                "Measurement Time": rightNow.datetime,
                 "Current Temperature": rightNow.temp,
                 "Feels Like": rightNow.feelslike,
                 "Weather Condition": rightNow.conditions,
