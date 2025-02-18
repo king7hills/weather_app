@@ -68,5 +68,6 @@ function populatePage () {
 };
 
 locButton.addEventListener('click', () => {
+    weatherContent.innerHTML = '';
     populatePage();
 });
